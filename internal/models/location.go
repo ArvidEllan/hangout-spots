@@ -4,12 +4,12 @@ import "github.com/google/uuid"
 
 // Location represents a curated place for couples.
 type Location struct {
-	ID            uuid.UUID `json:"id"`
+	ID            uuid.UUID `json:"id" gorm:"type:uuid;default:gen_random_uuid();primaryKey"`
 	Name          string    `json:"name"`
 	Area          string    `json:"area"`
 	CostPerPerson int       `json:"cost_per_person"`
 	Description   string    `json:"description"`
-	Activities    []string  `json:"activities"`
+	Activities    []string  `json:"activities" gorm:"type:text[]"`
 	Notes         string    `json:"notes"`
 	TransportTip  string    `json:"transport_tip"`
 	ImageURL      string    `json:"img_url"`

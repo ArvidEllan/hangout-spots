@@ -1,14 +1,15 @@
 package handlers
 
 import (
-	"github.com/google/uuid"
+	"errors"
+
+	"gorm.io/gorm"
 
 	"mpango-wa-cuddles/internal/models"
 )
 
-var demoLocations = []models.Location{
+var seedLocations = []models.Location{
 	{
-		ID:            uuid.New(),
 		Name:          "Oloolua Nature Trail",
 		Area:          "Karen",
 		CostPerPerson: 300,
@@ -20,7 +21,6 @@ var demoLocations = []models.Location{
 		Ticketing:     true,
 	},
 	{
-		ID:            uuid.New(),
 		Name:          "Paradise Lost",
 		Area:          "Kiambu",
 		CostPerPerson: 400,
@@ -32,7 +32,6 @@ var demoLocations = []models.Location{
 		Ticketing:     true,
 	},
 	{
-		ID:            uuid.New(),
 		Name:          "Karura Forest Picnic",
 		Area:          "Gigiri",
 		CostPerPerson: 200,
@@ -45,16 +44,14 @@ var demoLocations = []models.Location{
 	},
 }
 
-var demoAds = []models.Ad{
+var seedAds = []models.Ad{
 	{
-		ID:       uuid.New(),
 		Type:     "uber",
 		Link:     "https://m.uber.com/?promo=CUDDLE10",
 		ImageURL: "https://images.unsplash.com/photo-1504198453319-5ce911bafcde",
 		Weight:   5,
 	},
 	{
-		ID:       uuid.New(),
 		Type:     "giftshop",
 		Link:     "https://flowers.ke/cuddles",
 		ImageURL: "https://images.unsplash.com/photo-1501004318641-b39e6451bec6",
@@ -62,4 +59,26 @@ var demoAds = []models.Ad{
 	},
 }
 
-var demoTickets = []models.Ticket{}
+// Seed inserts demo data if tables are empty.
+func Seed(db *gorm.DB) error {
+	if db == nil {
+		return errors.New("seed: db is nil")
+	}
+
+	var count int64
+
+	db.Model(&models.Location{}).Count(&count)
+	if count == 0 {
+		if err := db.Create(&seedLocations).Error; err != nil {
+			return err
+		}
+	}
+
+	db.Model(&models.Ad{}).Count(&count)
+	if count == 0 {
+		if err := db.Create(&seedAds).Error; err != nil {
+			return err
+		}
+	}
+	return nil
+}

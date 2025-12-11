@@ -5,8 +5,14 @@ go 1.23.0
 toolchain go1.23.2
 
 require (
+	github.com/gin-contrib/cors v1.7.6
+	github.com/gin-contrib/sessions v0.0.5
+	github.com/gin-contrib/sessions/cookie v0.0.5
 	github.com/gin-gonic/gin v1.10.1
+	github.com/golang-jwt/jwt/v5 v5.2.1
 	github.com/google/uuid v1.6.0
+	gorm.io/driver/postgres v1.5.9
+	gorm.io/gorm v1.25.11
 )
 
 require (

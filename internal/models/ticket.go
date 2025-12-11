@@ -8,8 +8,8 @@ import (
 
 // Ticket tracks purchase attempts for venues.
 type Ticket struct {
-	ID          uuid.UUID `json:"id"`
-	LocationID  uuid.UUID `json:"location_id"`
+	ID          uuid.UUID `json:"id" gorm:"type:uuid;default:gen_random_uuid();primaryKey"`
+	LocationID  uuid.UUID `json:"location_id" gorm:"type:uuid"`
 	Price       int       `json:"price"`
 	MpesaRef    string    `json:"mpesa_ref"`
 	UserPhone   string    `json:"user_phone"`
