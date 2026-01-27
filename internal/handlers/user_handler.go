@@ -173,6 +173,38 @@ func SessionSaveLocation(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "saved"})
 }
 
+// SessionRemoveLocation removes a location from the session cuddle list.
+func SessionRemoveLocation(c *gin.Context) {
+	session := sessions.Default(c)
+	locID, err := uuid.Parse(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid location id"})
+		return
+	}
+
+	raw := session.Get("cuddle_list")
+	var ids []string
+	if raw != nil {
+		if existing, ok := raw.([]string); ok {
+			ids = existing
+		}
+	}
+
+	newIds := make([]string, 0, len(ids))
+	for _, id := range ids {
+		if id != locID.String() {
+			newIds = append(newIds, id)
+		}
+	}
+
+	session.Set("cuddle_list", newIds)
+	if err := session.Save(); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to save session"})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"message": "removed"})
+}
+
 // SessionList returns cuddle list stored in session.
 func SessionList(c *gin.Context) {
 	session := sessions.Default(c)

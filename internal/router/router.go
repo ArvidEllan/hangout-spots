@@ -47,6 +47,7 @@ func New(cfg config.Config) *gin.Engine {
 	r.GET("/tickets/status/:id", handlers.TicketStatus)
 	r.POST("/tickets/mpesa/callback", handlers.MpesaCallback)
 	r.POST("/cuddlelist/:id", handlers.SessionSaveLocation)
+	r.DELETE("/cuddlelist/:id", handlers.SessionRemoveLocation)
 	r.GET("/cuddlelist", handlers.SessionList)
 
 	// Placeholder admin group
